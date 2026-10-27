@@ -17,9 +17,14 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Michroma&family=Jost:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <script src="js/intro.js" defer></script>
 </head>
 <body>
-  <header class="top">
+  <script>
+    // Run the scroll intro only when motion is welcome; otherwise the page shows its finished scene.
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('intro-on');
+  </script>
+  <header class="top solid" id="top">
     <div class="wrap">
       <a class="logo" href="./" aria-label="Psychaic home">
         <svg class="orbit" viewBox="0 0 220 44" aria-hidden="true"><ellipse cx="110" cy="22" rx="107" ry="18"/><circle cx="208" cy="12" r="3.6"/></svg>
@@ -35,37 +40,49 @@
   </header>
 
   <main>
-    <section class="hero">
-      <div class="wrap hero-grid">
-        <div class="hero-copy">
-          <p class="label">Transmission 001</p>
-          <h1>The future, as it used to be <em>imagined.</em></h1>
-          <p class="lede">Art, ceramics and patterns made from chrome, sky and clay, and the big questions we once asked about tomorrow.</p>
-          <a class="button" href="#shop">Enter the shop</a>
+    <section class="intro" id="intro" aria-labelledby="intro-title">
+      <h1 id="intro-title" class="visually-hidden">Psychaic: the future, as it used to be imagined</h1>
+      <div class="stage">
+        <div class="sky" id="sky"></div>
+        <div class="ground" id="ground">
+          <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+            <line x1="0" y1="7" x2="100" y2="7"/><line x1="0" y1="19" x2="100" y2="19"/><line x1="0" y1="38" x2="100" y2="38"/><line x1="0" y1="66" x2="100" y2="66"/>
+            <line x1="50" y1="0" x2="-70" y2="100"/><line x1="50" y1="0" x2="-5" y2="100"/><line x1="50" y1="0" x2="28" y2="100"/><line x1="50" y1="0" x2="50" y2="100"/>
+            <line x1="50" y1="0" x2="72" y2="100"/><line x1="50" y1="0" x2="105" y2="100"/><line x1="50" y1="0" x2="170" y2="100"/>
+          </svg>
+          <div class="shadow" id="shadow"></div>
         </div>
-        <svg class="doorway" viewBox="0 0 320 440" role="img" aria-label="An arched doorway opening onto blue sky, with a chrome orb floating above a red horizon">
+        <svg class="planet" id="planet" viewBox="-280 -170 560 340" role="img" aria-label="A chrome planet wrapped by an oxblood ring, floating in a blue sky above a red horizon">
           <defs>
-            <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#739FC1"/><stop offset="0.7" stop-color="#B8D2E6"/><stop offset="1" stop-color="#D9EBF1"/></linearGradient>
-            <radialGradient id="orb" cx="36%" cy="30%" r="76%"><stop offset="0" stop-color="#FFFFFF"/><stop offset="0.22" stop-color="#E9ECEF"/><stop offset="0.52" stop-color="#9AA1A9"/><stop offset="0.76" stop-color="#3E444B"/><stop offset="0.9" stop-color="#C9CED4"/><stop offset="1" stop-color="#6E747B"/></radialGradient>
-            <clipPath id="arch"><path d="M30 430 V150 A130 130 0 0 1 290 150 V430 Z"/></clipPath>
+            <radialGradient id="chrome" cx="38%" cy="32%" r="72%">
+              <stop offset="0" stop-color="#FFFFFF"/><stop offset="0.2" stop-color="#ECEEF0"/><stop offset="0.5" stop-color="#B7BDC4"/>
+              <stop offset="0.76" stop-color="#5D636A"/><stop offset="0.9" stop-color="#3E444B"/><stop offset="1" stop-color="#A9AFB6"/>
+            </radialGradient>
+            <radialGradient id="rim" cx="50%" cy="50%" r="50%">
+              <stop offset="0.72" stop-color="#141619" stop-opacity="0"/><stop offset="1" stop-color="#141619" stop-opacity="0.35"/>
+            </radialGradient>
+            <radialGradient id="glint" cx="50%" cy="50%" r="50%">
+              <stop offset="0" stop-color="#FFFFFF" stop-opacity="0.95"/><stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/>
+            </radialGradient>
+            <clipPath id="ball"><circle r="100"/></clipPath>
+            <linearGradient id="ground-reflect" x1="0" y1="0" x2="0" y2="1"><stop offset="0.3" stop-color="#5A0B16" stop-opacity="0.3"/><stop offset="1" stop-color="#5A0B16" stop-opacity="0.08"/></linearGradient>
+            <filter id="soften" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="2.5"/></filter>
           </defs>
-          <g clip-path="url(#arch)">
-            <rect width="320" height="330" fill="url(#sky)"/>
-            <rect y="330" width="320" height="110" fill="#5A0B16"/>
-            <g stroke="#3E0712" stroke-width="1.2">
-              <line x1="0" y1="345" x2="320" y2="345"/><line x1="0" y1="368" x2="320" y2="368"/><line x1="0" y1="400" x2="320" y2="400"/>
-              <line x1="160" y1="330" x2="20" y2="440"/><line x1="160" y1="330" x2="100" y2="440"/><line x1="160" y1="330" x2="220" y2="440"/><line x1="160" y1="330" x2="300" y2="440"/>
+          <g id="ring-back-g" transform="rotate(-14)"><path id="ring-back" class="ring" pathLength="1" d="M -250 0 A 250 44 0 0 1 250 0"/></g>
+          <g clip-path="url(#ball)">
+            <circle r="100" fill="url(#chrome)"/>
+            <g filter="url(#soften)">
+              <path id="tint-sky" d="M -100 -100 H 100 V 16 Q 0 40 -100 16 Z" fill="#9CCBEA" opacity="0.22"/>
+              <path id="tint-horizon" d="M -100 16 Q 0 40 100 16 L 100 26 Q 0 54 -100 26 Z" fill="#2A2E33" opacity="0.45"/>
+              <path id="tint-ground" d="M -100 26 Q 0 54 100 26 V 100 H -100 Z" fill="url(#ground-reflect)" opacity="1"/>
             </g>
-            <ellipse cx="160" cy="338" rx="46" ry="5" fill="#2A050A" opacity="0.55"/>
-            <g class="float">
-              <circle cx="160" cy="226" r="70" fill="url(#orb)"/>
-              <ellipse cx="160" cy="226" rx="120" ry="24" transform="rotate(-14 160 226)" fill="none" stroke="#5A0B16" stroke-width="2.4"/>
-              <circle cx="270" cy="200" r="6" fill="#5A0B16"/>
-            </g>
+            <g id="seams" class="seams" transform="rotate(-14)"></g>
+            <circle r="100" fill="url(#rim)"/>
+            <circle cx="-36" cy="-40" r="34" fill="url(#glint)"/>
           </g>
-          <path class="arch-line" d="M30 430 V150 A130 130 0 0 1 290 150 V430" fill="none"/>
-          <rect class="sill" x="18" y="430" width="284" height="10"/>
+          <g id="ring-front-g" transform="rotate(-14)"><path id="ring-front" class="ring" pathLength="1" d="M 250 0 A 250 44 0 0 1 -250 0"/><circle id="satellite" r="9" cx="246.8" cy="7.0" fill="#5A0B16"/></g>
         </svg>
+        <p class="hint" id="hint">Scroll</p>
       </div>
     </section>
 

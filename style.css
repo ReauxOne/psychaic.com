@@ -37,15 +37,18 @@ a { color: inherit; }
 .wrap { width: min(1160px, 100% - 32px); margin-inline: auto; }
 .narrow { width: min(720px, 100% - 32px); }
 
-/* Header */
-.top { border-bottom: 1px solid var(--line); }
-.top .wrap { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 22px 0; flex-wrap: wrap; }
-.logo { position: relative; display: inline-flex; align-items: center; padding: 10px 22px; text-decoration: none; }
+/* Header: fixed; see-through over the intro sky, solid once the page content starts */
+.top { position: fixed; inset: 0 0 auto; z-index: 10; border-bottom: 1px solid transparent; transition: background-color .3s, border-color .3s; }
+.top.solid { background: var(--ground); border-bottom-color: var(--line); }
+.top:not(.solid) { color: #141619; --steel: #8C939A; }
+.top:not(.solid) nav a { color: #2A2E33; }
+.top .wrap { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 18px 0; flex-wrap: wrap; }
+.logo { position: relative; display: inline-flex; align-items: center; padding: 10px 22px; text-decoration: none; transform-origin: center; will-change: transform; }
 .logo span { position: relative; font: 15px var(--display); letter-spacing: 0.3em; margin-right: -0.3em; }
 .orbit { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
 .orbit ellipse { fill: none; stroke: var(--steel); stroke-width: 1.2; vector-effect: non-scaling-stroke; }
 .orbit circle { fill: #5A0B16; }
-@media (prefers-color-scheme: dark) { .orbit circle { fill: #C4253C; } }
+@media (prefers-color-scheme: dark) { .top.solid .orbit circle { fill: #C4253C; } }
 nav { display: flex; gap: 6px; flex-wrap: wrap; }
 nav a { font: 12px var(--mono); letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none; padding: 12px 10px; color: var(--muted); }
 nav a:hover { color: var(--ink); }
@@ -64,16 +67,24 @@ h3 { font-size: 30px; }
 .section { padding: 96px 0; border-top: 1px solid var(--line); }
 .soft { background: var(--soft); }
 
-/* Hero */
-.hero { background: var(--soft); }
-.hero-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 48px; align-items: end; padding: 72px 0 0; }
-.hero-copy { padding-bottom: 88px; }
-.doorway { width: 100%; max-width: 420px; justify-self: end; }
-.arch-line { stroke: var(--steel); stroke-width: 2; }
-.sill { fill: var(--steel); }
-.float { animation: float 7s ease-in-out infinite; }
-@keyframes float { 50% { transform: translateY(-8px); } }
-@media (prefers-reduced-motion: reduce) { .float { animation: none; } }
+/* Intro: a white room, a chrome planet, then sky, ring and ground arrive as you scroll.
+   Without the intro-on class (reduced motion, no script) it is simply the finished scene. */
+.intro { position: relative; height: 100svh; }
+.intro-on .intro { height: 420svh; }
+.stage { position: sticky; top: 0; height: 100svh; overflow: hidden; background: #FFFFFF; --orb: min(40svh, 52vw); }
+@media (max-width: 760px) { .stage { --orb: min(36svh, 34vw); } }
+.sky { position: absolute; inset: 0; background: linear-gradient(#7FA7C9, #A9C8E0 45%, #D6E7F1 72%); }
+.ground { position: absolute; left: 0; right: 0; bottom: 0; height: 30%; background: linear-gradient(#5A0B16, #4A0812); }
+.ground svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.ground line { stroke: #2E050C; stroke-width: 1.2; vector-effect: non-scaling-stroke; }
+.shadow { position: absolute; left: 50%; top: 4%; width: calc(var(--orb) * 1.1); height: calc(var(--orb) * 0.09); transform: translateX(-50%); border-radius: 50%; background: radial-gradient(#1E0307 30%, transparent 70%); opacity: .7; }
+.planet { position: absolute; left: 50%; top: 44%; width: calc(var(--orb) * 2.8); transform: translate(-50%, -50%); overflow: visible; }
+.ring { fill: none; stroke: #5A0B16; stroke-width: 5; stroke-linecap: round; }
+.seams path { fill: none; stroke: #FFFFFF; stroke-width: 0.8; }
+.hint { position: absolute; left: 50%; bottom: 28px; transform: translateX(-50%); margin: 0; font: 11px var(--mono); letter-spacing: .3em; text-transform: uppercase; color: #6E747B; opacity: 0; }
+.intro-on .hint { opacity: 1; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.section { scroll-margin-top: 80px; }
 
 /* Product */
 .product { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; margin-top: 48px; }
@@ -103,12 +114,11 @@ footer { border-top: 1px solid var(--line); }
 /* Phones */
 @media (max-width: 760px) {
   body { font-size: 17px; }
-  .top .wrap { justify-content: center; }
-  nav { justify-content: center; }
-  .hero-grid, .product, .work-grid { grid-template-columns: 1fr; gap: 32px; }
-  .hero-grid { padding-top: 48px; }
-  .hero-copy { padding-bottom: 0; }
-  .doorway { justify-self: center; max-width: 300px; }
+  .top .wrap { padding: 10px 0; }
+  .logo { padding: 8px 16px; }
+  .logo span { font-size: 12px; }
+  nav a { padding: 10px 6px; font-size: 11px; letter-spacing: .08em; }
+  .product, .work-grid { grid-template-columns: 1fr; gap: 32px; }
   .section { padding: 64px 0; }
   .facts div { grid-template-columns: 1fr; gap: 2px; }
 }

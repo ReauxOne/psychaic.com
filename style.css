@@ -70,7 +70,7 @@ h3 { font-size: 30px; }
 /* Intro: a white room, a chrome planet, then sky, ring and ground arrive as you scroll.
    Without the intro-on class (reduced motion, no script) it is simply the finished scene. */
 .intro { position: relative; height: 100svh; }
-.intro-on .intro { height: 420svh; }
+.intro-on .intro { height: 640svh; }
 .stage { position: sticky; top: 0; height: 100svh; overflow: hidden; background: #FFFFFF; --orb: min(40svh, 52vw); }
 @media (max-width: 760px) { .stage { --orb: min(36svh, 34vw); } }
 .sky { position: absolute; inset: 0; background: linear-gradient(#7FA7C9, #A9C8E0 45%, #D6E7F1 72%); }
@@ -86,25 +86,40 @@ h3 { font-size: 30px; }
 .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .section { scroll-margin-top: 80px; }
 
-/* Shop launch: a chrome capsule breaks up through the red ground and climbs into the sky.
-   Decorative only, so it is skipped entirely when the intro is off (reduced motion, no script). */
-.launch { display: none; }
-.intro-on .launch { display: block; height: 260svh; position: relative; }
-.launch-stage { position: sticky; top: 0; height: 100svh; overflow: hidden; --cap: min(62svh, 80vw); }
-.launch-sky { position: absolute; inset: 0; background: linear-gradient(#7FA7C9, #A9C8E0 45%, #D6E7F1 80%); }
-.launch-ground { position: absolute; left: 0; right: 0; top: 0; height: 100%; background: linear-gradient(#5A0B16, #44070F); will-change: transform; }
-.launch-ground svg { position: absolute; inset: 0; width: 100%; height: 100%; }
-.launch-ground line { stroke: #2E050C; stroke-width: 1.2; vector-effect: non-scaling-stroke; }
-.launch-fx { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
-#cracks polyline { fill: none; stroke: #F1DADD; stroke-width: 2; stroke-linejoin: bevel; }
-#hole { fill: #1A0206; }
-.shards polygon { fill: #7A1424; stroke: #F1DADD; stroke-width: 1.5; stroke-linejoin: round; }
-.contrail { position: absolute; left: 50%; width: calc(var(--cap) * 0.42); transform: translateX(-50%); background: linear-gradient(rgba(255,255,255,.95), rgba(255,255,255,.55) 60%, rgba(255,255,255,0)); filter: blur(10px); border-radius: 50% 50% 0 0; }
-.capsule-wrap { position: absolute; left: 50%; top: 0; width: calc(var(--cap) * 0.333); will-change: transform, clip-path; }
-.capsule { width: 100%; height: auto; overflow: visible; }
-.dust { position: absolute; left: 50%; top: 0; width: calc(var(--cap) * 1.1); height: calc(var(--cap) * 0.32); border-radius: 50%; background: radial-gradient(rgba(246,232,234,.9), rgba(246,232,234,.35) 45%, transparent 70%); filter: blur(6px); opacity: 0; pointer-events: none; }
-.whiteout { position: absolute; inset: 0; background: var(--ground); opacity: 0; }
-.launch + .section { border-top: 0; }
+/* The four doorways that arrive in the held scene. Each one links to its page. */
+.thing { position: absolute; display: flex; flex-direction: column; align-items: center; gap: 10px; text-decoration: none; color: #141619; }
+.thing .art { display: block; width: 100%; transform-origin: 50% 100%; }
+.thing svg { width: 100%; height: auto; overflow: visible; }
+.thing::after { content: ""; position: absolute; left: 10%; right: 10%; bottom: -4px; height: 10px; border-radius: 50%; background: radial-gradient(rgba(20, 2, 6, .65), transparent 70%); z-index: -1; }
+.tag { font: 500 11px var(--mono); letter-spacing: .22em; text-transform: uppercase; background: rgba(255, 255, 255, .82); padding: 6px 9px; white-space: nowrap; transition: background-color .2s, color .2s; }
+.thing:hover .tag, .thing:focus-visible .tag { background: #5A0B16; color: #FFFFFF; }
+.thing:focus-visible { outline: none; }
+.thing:hover .art, .thing:focus-visible .art { filter: drop-shadow(0 0 10px rgba(156, 203, 234, .9)); }
+.thing-shop { left: 11%; bottom: 6%; width: min(15svh, 17vw); }
+.thing-transmissions { left: 29%; bottom: 11%; width: min(17svh, 19vw); }
+.thing-work { right: 10%; bottom: 2%; width: min(27svh, 27vw); }
+.thing-work .art { overflow: hidden; }
+.signal path { animation: signal 2.4s ease-out infinite; }
+.signal path:nth-child(2) { animation-delay: .3s; }
+.signal path:nth-child(3) { animation-delay: .6s; }
+@keyframes signal { 0% { opacity: 0; } 30% { opacity: 1; } 100% { opacity: 0; } }
+.thing-about { cursor: pointer; }
+.thing-about .halo { fill: none; stroke: #5A0B16; stroke-width: 2; transform-box: fill-box; transform-origin: center; animation: halo 2.2s ease-out infinite; }
+@keyframes halo { 0% { transform: scale(.6); opacity: .9; } 100% { transform: scale(2.2); opacity: 0; } }
+.svg-tag { font: 500 13px var(--mono); letter-spacing: .22em; fill: #141619; }
+.thing-about:hover .svg-tag, .thing-about:focus-visible .svg-tag { fill: #5A0B16; }
+.thing-about:focus-visible circle:last-of-type { stroke: #5A0B16; stroke-width: 2; }
+@media (prefers-reduced-motion: reduce) { .signal path, .thing-about .halo { animation: none; } }
+.stage-foot { position: absolute; left: 50%; bottom: 10px; transform: translateX(-50%); margin: 0; font: 10px var(--mono); letter-spacing: .2em; text-transform: uppercase; color: rgba(255, 255, 255, .55); }
+.portal-veil { position: fixed; z-index: 50; width: 40px; height: 40px; margin: -20px 0 0 -20px; border-radius: 50%; pointer-events: none; transform: scale(0); transition: transform .65s cubic-bezier(.7, 0, .3, 1); }
+
+/* Inner pages */
+.page main { min-height: 70svh; }
+.page-first { border-top: 0; padding-top: 150px; }
+.page-about { --ground: #5A0B16; --soft: #5A0B16; --ink: #FFFFFF; --muted: #F1DADD; --line: rgba(255, 255, 255, .22); --steel: #D3A9B0; --accent: #9CCBEA; }
+.page-about .top.solid .orbit circle, .page-about .orbit circle { fill: #FFFFFF; }
+.page-about h2 { font-size: clamp(40px, 6vw, 72px); font-weight: 400; }
+.page-about main p { font-size: 21px; }
 
 /* Product */
 .product { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; margin-top: 48px; }

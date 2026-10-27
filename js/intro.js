@@ -1,7 +1,9 @@
 // Psychaic scroll intro. As the visitor scrolls through #intro:
 // a lone chrome planet spins on white -> the oxblood ring sweeps in and wraps it ->
 // the sky fades up -> the ground rises -> the wordmark comes forward and settles
-// into the header -> the menu pops in on the right.
+// into the header -> the menu pops in on the right. Then the scene holds still while the
+// four doorways arrive one by one: the capsule (Shop), the hand (Work), the antenna plant
+// (Transmissions) and a pulse on the red satellite (About). Each links to its own page.
 // The HTML and CSS already show the finished scene, so this only runs when <html> has
 // the intro-on class (set when the visitor hasn't asked for reduced motion).
 (() => {
@@ -15,6 +17,11 @@
   const ringBack = $('ring-back'), ringFront = $('ring-front'), satellite = $('satellite');
   const backG = $('ring-back-g'), frontG = $('ring-front-g'), seams = $('seams');
   const tints = { sky: $('tint-sky'), horizon: $('tint-horizon'), ground: $('tint-ground') };
+  const things = {
+    shop: document.querySelector('.thing-shop'), work: document.querySelector('.thing-work'),
+    transmissions: document.querySelector('.thing-transmissions'), about: document.querySelector('.thing-about'),
+  };
+  const INTRO_END = 0.6;   // the first 60% of the scroll plays the intro; the rest brings in the doorways
 
   const RX = 250;        // ring radius across, in planet units (the ball is 100)
   const SEAMS = 6;       // engraved meridians that show the ball turning
@@ -61,10 +68,10 @@
     seamPaths[SEAMS].setAttribute('d', 'M -100 0 A 100 17 0 0 0 100 0'); // equator, front half
   }
 
-  let progress = 0, pastScene = false, idle = 0, last = performance.now();
+  let progress = 0, idle = 0, last = performance.now();
 
   function render() {
-    const p = progress;
+    const p = clamp(progress / INTRO_END);
     // ring sweeps in, tilting from steep to settled, and opens from a sliver to a full wrap
     const ringT = span(p, 0.06, 0.36);
     ringPaths(mix(6, 44, ringT));
@@ -106,14 +113,35 @@
       a.style.opacity = t;
       a.style.transform = `translateY(${(1 - t) * 14}px)`;
     });
-    header.classList.toggle('solid', pastScene);
+    arrive(progress);
+  }
+
+  // Each doorway's arrival, over its own slice of the scroll after the intro.
+  function arrive(p) {
+    const show = (el, t) => {
+      el.style.opacity = t;
+      el.style.pointerEvents = t > 0.9 ? 'auto' : 'none';
+      const tag = el.querySelector('.tag');
+      if (tag) tag.style.opacity = span(t, 0.7, 1);
+    };
+    const shop = span(p, 0.62, 0.71);                 // lands, settling down onto the ground
+    show(things.shop, shop);
+    things.shop.querySelector('.art').style.transform = `translateY(${(-(1 - shop) * 60).toFixed(1)}%)`;
+    const work = span(p, 0.7, 0.79);                  // rises out of the ground
+    show(things.work, work);
+    things.work.querySelector('svg').style.transform = `translateY(${((1 - work) * 100).toFixed(1)}%)`;
+    const plant = span(p, 0.78, 0.87);               // grows up from its root
+    show(things.transmissions, plant);
+    things.transmissions.querySelector('.art').style.transform = `scaleY(${Math.max(0.01, plant).toFixed(3)})`;
+    const about = span(p, 0.86, 0.94);               // the satellite starts to pulse
+    things.about.style.opacity = about;
+    things.about.style.pointerEvents = about > 0.9 ? 'auto' : 'none';
   }
 
   function onScroll() {
     const r = intro.getBoundingClientRect();
     const run = intro.offsetHeight - innerHeight;
     progress = clamp(-r.top / run);
-    pastScene = r.bottom <= header.offsetHeight; // the header turns solid once the sky has scrolled under it
   }
 
   function frame(now) {

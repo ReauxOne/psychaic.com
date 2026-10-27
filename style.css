@@ -95,21 +95,24 @@ h3 { font-size: 30px; }
 .thing:hover .tag, .thing:focus-visible .tag { background: #5A0B16; color: #FFFFFF; }
 .thing:focus-visible { outline: none; }
 .thing:hover .art, .thing:focus-visible .art { filter: drop-shadow(0 0 10px rgba(156, 203, 234, .9)); }
-.thing-shop { left: 11%; bottom: 6%; width: min(15svh, 17vw); }
-.thing-transmissions { left: 29%; bottom: 11%; width: min(17svh, 19vw); }
-.thing-work { right: 10%; bottom: 2%; width: min(27svh, 27vw); }
-.thing-work .art { overflow: hidden; }
-.signal path { animation: signal 2.4s ease-out infinite; }
-.signal path:nth-child(2) { animation-delay: .3s; }
-.signal path:nth-child(3) { animation-delay: .6s; }
-@keyframes signal { 0% { opacity: 0; } 30% { opacity: 1; } 100% { opacity: 0; } }
+.orb-link::after { display: none; }
+.orb-shop { left: 9%; bottom: 7%; width: min(18svh, 21vw); }
+.orb-transmissions { left: 31%; bottom: 17%; width: min(10svh, 13vw); }
+.orb-work { right: 9%; bottom: 5%; width: min(21svh, 24vw); }
+.orb-body { animation: bob 6s ease-in-out infinite; }
+.orb-shadow { transform-box: fill-box; transform-origin: center; animation: breathe 6s ease-in-out infinite; }
+.orb-transmissions .orb-body, .orb-transmissions .orb-shadow { animation-delay: -2s; }
+.orb-work .orb-body, .orb-work .orb-shadow { animation-delay: -4s; }
+@keyframes bob { 50% { transform: translateY(-9px); } }
+@keyframes breathe { 50% { transform: scale(.88); opacity: .75; } }
+@media (prefers-reduced-motion: reduce) { .orb-body, .orb-shadow { animation: none; } }
 .thing-about { cursor: pointer; }
 .thing-about .halo { fill: none; stroke: #5A0B16; stroke-width: 2; transform-box: fill-box; transform-origin: center; animation: halo 2.2s ease-out infinite; }
 @keyframes halo { 0% { transform: scale(.6); opacity: .9; } 100% { transform: scale(2.2); opacity: 0; } }
 .svg-tag { font: 500 13px var(--mono); letter-spacing: .22em; fill: #141619; }
 .thing-about:hover .svg-tag, .thing-about:focus-visible .svg-tag { fill: #5A0B16; }
 .thing-about:focus-visible circle:last-of-type { stroke: #5A0B16; stroke-width: 2; }
-@media (prefers-reduced-motion: reduce) { .signal path, .thing-about .halo { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .thing-about .halo { animation: none; } }
 .stage-foot { position: absolute; left: 50%; bottom: 10px; transform: translateX(-50%); margin: 0; font: 10px var(--mono); letter-spacing: .2em; text-transform: uppercase; color: rgba(255, 255, 255, .55); }
 .portal-veil { position: fixed; z-index: 50; width: 40px; height: 40px; margin: -20px 0 0 -20px; border-radius: 50%; pointer-events: none; transform: scale(0); transition: transform .65s cubic-bezier(.7, 0, .3, 1); }
 

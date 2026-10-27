@@ -1,9 +1,9 @@
 // Psychaic scroll intro. As the visitor scrolls through #intro:
 // a lone chrome planet spins on white -> the oxblood ring sweeps in and wraps it ->
 // the sky fades up -> the ground rises -> the wordmark comes forward and settles
-// into the header -> the menu pops in on the right. Then the scene holds still while the
-// four doorways arrive one by one: the capsule (Shop), the hand (Work), the antenna plant
-// (Transmissions) and a pulse on the red satellite (About). Each links to its own page.
+// into the header. Then the scene holds still while four doorways arrive one by one:
+// a bronze orb (Shop), a lapis orb (Work), a violet orb (Transmissions) and a pulse on the
+// red satellite (About). Each links to its own page.
 // The HTML and CSS already show the finished scene, so this only runs when <html> has
 // the intro-on class (set when the visitor hasn't asked for reduced motion).
 (() => {
@@ -18,8 +18,8 @@
   const backG = $('ring-back-g'), frontG = $('ring-front-g'), seams = $('seams');
   const tints = { sky: $('tint-sky'), horizon: $('tint-horizon'), ground: $('tint-ground') };
   const things = {
-    shop: document.querySelector('.thing-shop'), work: document.querySelector('.thing-work'),
-    transmissions: document.querySelector('.thing-transmissions'), about: document.querySelector('.thing-about'),
+    shop: document.querySelector('.orb-shop'), work: document.querySelector('.orb-work'),
+    transmissions: document.querySelector('.orb-transmissions'), about: document.querySelector('.thing-about'),
   };
   const INTRO_END = 0.6;   // the first 60% of the scroll plays the intro; the rest brings in the doorways
 
@@ -124,15 +124,14 @@
       const tag = el.querySelector('.tag');
       if (tag) tag.style.opacity = span(t, 0.7, 1);
     };
-    const shop = span(p, 0.62, 0.71);                 // lands, settling down onto the ground
-    show(things.shop, shop);
-    things.shop.querySelector('.art').style.transform = `translateY(${(-(1 - shop) * 60).toFixed(1)}%)`;
-    const work = span(p, 0.7, 0.79);                  // rises out of the ground
-    show(things.work, work);
-    things.work.querySelector('svg').style.transform = `translateY(${((1 - work) * 100).toFixed(1)}%)`;
-    const plant = span(p, 0.78, 0.87);               // grows up from its root
-    show(things.transmissions, plant);
-    things.transmissions.querySelector('.art').style.transform = `scaleY(${Math.max(0.01, plant).toFixed(3)})`;
+    // each orb drifts down out of the sky and settles above its shadow
+    const orb = (el, t) => {
+      show(el, t);
+      el.querySelector('.art').style.transform = `translateY(${(-(1 - t) * 90).toFixed(1)}%) scale(${(0.4 + 0.6 * t).toFixed(3)})`;
+    };
+    orb(things.shop, span(p, 0.62, 0.71));
+    orb(things.work, span(p, 0.7, 0.79));
+    orb(things.transmissions, span(p, 0.78, 0.87));
     const about = span(p, 0.86, 0.94);               // the satellite starts to pulse
     things.about.style.opacity = about;
     things.about.style.pointerEvents = about > 0.9 ? 'auto' : 'none';

@@ -121,8 +121,6 @@
     const show = (el, t) => {
       el.style.opacity = t;
       el.style.pointerEvents = t > 0.9 ? 'auto' : 'none';
-      const tag = el.querySelector('.tag');
-      if (tag) tag.style.opacity = span(t, 0.7, 1);
     };
     // each orb drifts down out of the sky and settles above its shadow
     const orb = (el, t) => {

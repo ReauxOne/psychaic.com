@@ -93,6 +93,18 @@ h3 { font-size: 30px; }
 .thing::after { content: ""; position: absolute; left: 10%; right: 10%; bottom: -4px; height: 10px; border-radius: 50%; background: radial-gradient(rgba(20, 2, 6, .65), transparent 70%); z-index: -1; }
 .tag { font: 500 11px var(--mono); letter-spacing: .22em; text-transform: uppercase; background: rgba(255, 255, 255, .82); padding: 6px 9px; white-space: nowrap; transition: background-color .2s, color .2s; }
 .thing:hover .tag, .thing:focus-visible .tag { background: #5A0B16; color: #FFFFFF; }
+/* Labels stay out of the picture until you point at an orb. On touch screens, where there is
+   no pointing, they show as small plain text instead of boxes so visitors still know what's what. */
+@media (hover: hover) {
+  .tag { opacity: 0; transform: translateY(6px); transition: opacity .25s, transform .25s, background-color .2s, color .2s; }
+  .thing:hover .tag, .thing:focus-visible .tag { opacity: 1; transform: none; }
+  .thing-about .svg-tag { opacity: 0; transition: opacity .25s; }
+  .thing-about:hover .svg-tag, .thing-about:focus-visible .svg-tag { opacity: 1; }
+}
+@media (hover: none) {
+  .tag { background: none; color: rgba(255, 255, 255, .78); padding: 0; font-size: 10px; }
+  .thing-about .svg-tag { fill: rgba(20, 22, 25, .6); }
+}
 .thing:focus-visible { outline: none; }
 .thing:hover .art, .thing:focus-visible .art { filter: drop-shadow(0 0 10px rgba(156, 203, 234, .9)); }
 .orb-link::after { display: none; }
